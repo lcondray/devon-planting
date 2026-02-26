@@ -1,0 +1,2916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Devon House — Master Planting Plan</title>
+  <style>
+    /* ─── DESIGN TOKENS ─── */
+    :root {
+      --bg:          #0e0d0b;
+      --bg-card:     #161410;
+      --bg-section:  #131210;
+      --bg-elevated: #1e1c18;
+      --border:      #2e2b24;
+      --border-light:#3a3629;
+      --gold:        #c9a84c;
+      --gold-light:  #e2c26e;
+      --gold-dim:    #8a6f30;
+      --cream:       #f0ead8;
+      --muted:       #8a8070;
+      --muted-light: #b0a590;
+      --green-dark:  #2a3d28;
+      --green-mid:   #3b5438;
+      --green-leaf:  #5a7a4a;
+      --green-light: #7a9e68;
+      --moss:        #4a5c3a;
+      --stone:       #6b6458;
+      --lavender:    #8b7ab8;
+      --sage:        #7a9e8a;
+      --rust:        #b85c38;
+      --blush:       #c88888;
+      --slate:       #5a7888;
+
+      --font-serif:  'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+      --font-sans:   'Optima', 'Segoe UI', system-ui, sans-serif;
+      --font-mono:   'Courier New', monospace;
+      --radius:      8px;
+      --radius-lg:   14px;
+      --shadow:      0 4px 20px rgba(0,0,0,0.5);
+      --shadow-sm:   0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--font-serif);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    ::selection { background: var(--gold-dim); color: var(--cream); }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+
+    /* ─── TYPOGRAPHY ─── */
+    h1, h2, h3, h4, h5 { font-family: var(--font-serif); line-height: 1.2; }
+    h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; letter-spacing: 0.04em; }
+    h2 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 400; letter-spacing: 0.03em; }
+    h3 { font-size: clamp(1.1rem, 2.5vw, 1.4rem); font-weight: 400; letter-spacing: 0.02em; }
+    h4 { font-size: 1rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font-sans); }
+    em { font-style: italic; color: var(--muted-light); }
+    strong { color: var(--gold-light); font-weight: 600; }
+    p { margin-bottom: 0.75em; }
+
+    /* ─── LAYOUT ─── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 6vw, 6rem);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 70% 50%, rgba(42,61,40,0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(90,122,74,0.15) 0%, transparent 50%),
+        linear-gradient(135deg, #0a0d09 0%, #0e0d0b 40%, #111009 100%);
+      z-index: 0;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 200px;
+      background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+      z-index: 1;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 700px; }
+    .hero-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 40px; height: 1px;
+      background: var(--gold);
+    }
+    .hero h1 { color: var(--cream); margin-bottom: 0.5rem; }
+    .hero h1 span { color: var(--gold-light); }
+    .hero-address {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted-light);
+      max-width: 540px;
+      margin-bottom: 2.5rem;
+      border-left: 2px solid var(--gold-dim);
+      padding-left: 1.2rem;
+      font-style: italic;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .hero-meta-label {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+    }
+    .hero-meta-value {
+      font-size: 0.9rem;
+      color: var(--cream);
+    }
+
+    /* ─── ORNAMENTAL DIVIDER ─── */
+    .divider {
+      display: flex; align-items: center; gap: 1.5rem;
+      margin: 3rem 0;
+      color: var(--gold-dim);
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1;
+      height: 1px; background: var(--border);
+    }
+    .divider-text {
+      font-family: var(--font-sans);
+      font-size: 0.65rem; letter-spacing: 0.25em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--gold-dim);
+    }
+
+    /* ─── STICKY NAV ─── */
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(14, 13, 11, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(1rem, 4vw, 3rem);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 0.85rem 1.1rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+      border-bottom: 2px solid transparent;
+      position: relative;
+    }
+    .nav-item:hover { color: var(--cream); }
+    .nav-item.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+    .nav-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px;
+      background: var(--gold-dim);
+      color: var(--bg);
+      border-radius: 50%;
+      font-size: 0.65rem;
+      font-weight: 700;
+      margin-right: 0.4rem;
+    }
+    .nav-item.active .nav-badge { background: var(--gold); }
+
+    /* ─── MAIN SECTIONS ─── */
+    .section { padding: 4rem 0; }
+    .section + .section { border-top: 1px solid var(--border); }
+    .section-header { margin-bottom: 3rem; }
+    .section-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+    .section-title { color: var(--cream); }
+    .section-subtitle { color: var(--muted-light); margin-top: 0.5rem; font-size: 1rem; }
+
+    /* ─── OVERVIEW MAP SVG ─── */
+    .overview-map-wrapper {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+    .map-svg {
+      width: 100%;
+      max-width: 600px;
+      display: block;
+      margin: 0 auto;
+    }
+    .map-svg text { font-family: var(--font-sans); }
+
+    /* ─── PRINCIPLES GRID ─── */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+    .principle-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .principle-num {
+      font-family: var(--font-sans);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold-dim);
+      line-height: 1;
+      min-width: 2rem;
+      padding-top: 0.15rem;
+    }
+    .principle-text {
+      font-size: 0.875rem;
+      color: var(--muted-light);
+      line-height: 1.5;
+    }
+
+    /* ─── AREA SECTION ─── */
+    .area-section {
+      padding: 5rem 0;
+      scroll-margin-top: 60px;
+    }
+    .area-section + .area-section { border-top: 1px solid var(--border); }
+
+    .area-header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+      align-items: start;
+      margin-bottom: 2.5rem;
+    }
+    @media (max-width: 600px) { .area-header { grid-template-columns: 1fr; } }
+
+    .area-letter {
+      font-family: var(--font-serif);
+      font-size: clamp(5rem, 12vw, 8rem);
+      line-height: 0.85;
+      color: var(--gold-dim);
+      opacity: 0.4;
+      user-select: none;
+    }
+    .area-title-block {}
+    .area-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 0.2rem 0.7rem;
+      border-radius: 100px;
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .badge-temp { background: rgba(184,92,56,0.2); color: #e8906a; border: 1px solid rgba(184,92,56,0.4); }
+    .badge-perm { background: rgba(90,122,74,0.2); color: #8ec47a; border: 1px solid rgba(90,122,74,0.4); }
+    .badge-sun { background: rgba(201,168,76,0.15); color: var(--gold-light); border: 1px solid rgba(201,168,76,0.3); }
+    .badge-shade { background: rgba(90,120,136,0.2); color: #8ab8cc; border: 1px solid rgba(90,120,136,0.4); }
+    .badge-zone { background: rgba(139,122,184,0.15); color: #b8aae0; border: 1px solid rgba(139,122,184,0.3); }
+
+    .area-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 1rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .area-meta-item {}
+    .area-meta-label {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.2rem;
+    }
+    .area-meta-value {
+      font-size: 0.9rem;
+      color: var(--muted-light);
+    }
+
+    .area-intent {
+      background: var(--bg-elevated);
+      border-left: 3px solid var(--gold-dim);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 2.5rem;
+      font-style: italic;
+      color: var(--muted-light);
+      font-size: 0.95rem;
+    }
+
+    /* ─── PLANT GRID ─── */
+    .plants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .plant-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .plant-card:hover {
+      border-color: var(--gold-dim);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+    .plant-card.existing { border-color: var(--moss); }
+    .plant-card.existing:hover { border-color: var(--green-light); }
+
+    .plant-img-wrap {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+      background: var(--bg-elevated);
+    }
+    .plant-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      display: block;
+    }
+    .plant-card:hover .plant-img-wrap img { transform: scale(1.05); }
+
+    .plant-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--bg-elevated) 100%);
+      color: var(--green-light);
+    }
+    .plant-img-placeholder .ph-icon { font-size: 3rem; margin-bottom: 0.5rem; opacity: 0.6; }
+    .plant-img-placeholder .ph-name {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 0 0.5rem;
+      font-style: italic;
+    }
+
+    .plant-badge-strip {
+      position: absolute;
+      top: 0.6rem; right: 0.6rem;
+      display: flex; gap: 0.3rem;
+    }
+    .plant-tag {
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
+      font-size: 0.6rem;
+      font-family: var(--font-sans);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      backdrop-filter: blur(4px);
+    }
+    .plant-tag-existing { background: rgba(74,92,58,0.85); color: #9eba88; }
+    .plant-tag-new { background: rgba(14,13,11,0.75); color: var(--gold-light); }
+
+    .plant-info { padding: 1rem 1.1rem 1.1rem; }
+    .plant-common {
+      font-size: 1rem;
+      color: var(--cream);
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+      line-height: 1.3;
+    }
+    .plant-botanical {
+      font-style: italic;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.7rem;
+    }
+    .plant-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .plant-detail-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+    }
+    .detail-label {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      min-width: 3rem;
+      flex-shrink: 0;
+    }
+    .detail-value { color: var(--muted-light); line-height: 1.4; }
+
+    .plant-qty-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--green-dark);
+      color: var(--green-light);
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      margin-top: 0.7rem;
+      border: 1px solid var(--moss);
+    }
+
+    /* ─── LAYERING DIAGRAM ─── */
+    .layering-section { margin-bottom: 3rem; }
+    .layering-diagram {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      overflow-x: auto;
+    }
+    .layer-item {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 0;
+    }
+    .layer-item:not(:last-child) {
+      border-bottom: 1px solid var(--border);
+    }
+    .layer-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 40px;
+      flex-shrink: 0;
+      padding: 0.5rem 0;
+    }
+    .layer-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--gold-dim);
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+    .layer-line {
+      width: 1px;
+      flex: 1;
+      min-height: 1.5rem;
+      background: var(--border);
+    }
+    .layer-item:first-child .layer-connector { padding-top: 1rem; }
+    .layer-item:last-child .layer-connector { padding-bottom: 1rem; }
+    .layer-item:last-child .layer-line:last-child { display: none; }
+
+    .layer-content {
+      flex: 1;
+      padding: 0.85rem 0 0.85rem 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+    }
+    .layer-tier-label {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      min-width: 120px;
+    }
+    .layer-plants { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .layer-plant-pill {
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--cream);
+      border: 1px solid;
+    }
+    .layer-canopy { border-color: var(--green-mid); background: rgba(59,84,56,0.25); }
+    .layer-sub { border-color: var(--green-leaf); background: rgba(90,122,74,0.2); }
+    .layer-structural { border-color: var(--moss); background: rgba(74,92,58,0.2); }
+    .layer-herbaceous { border-color: var(--sage); background: rgba(122,158,138,0.15); }
+    .layer-ground { border-color: var(--gold-dim); background: rgba(138,111,48,0.15); }
+    .layer-edge { border-color: var(--lavender); background: rgba(139,122,184,0.15); }
+    .layer-new-badge {
+      font-size: 0.55rem;
+      font-family: var(--font-sans);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-style: normal;
+      padding: 0.1rem 0.4rem;
+      border: 1px solid var(--gold-dim);
+      border-radius: 100px;
+      vertical-align: middle;
+      margin-left: 0.3rem;
+    }
+
+    /* ─── SEASONAL TIMELINE ─── */
+    .seasonal-section { margin-bottom: 3rem; }
+    .seasonal-chart {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .seasonal-header {
+      display: grid;
+      grid-template-columns: 180px repeat(4, 1fr);
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 600px) { .seasonal-header { grid-template-columns: 120px repeat(4, 1fr); } }
+    .seasonal-col-header {
+      padding: 0.6rem 0.75rem;
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+    .seasonal-col-header:first-child { text-align: left; }
+    .seasonal-row {
+      display: grid;
+      grid-template-columns: 180px repeat(4, 1fr);
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 600px) { .seasonal-row { grid-template-columns: 120px repeat(4, 1fr); } }
+    .seasonal-row:last-child { border-bottom: none; }
+    .seasonal-plant-name {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.78rem;
+      color: var(--muted-light);
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid var(--border);
+    }
+    .seasonal-cell {
+      padding: 0.4rem 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .season-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .season-block {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+    }
+    .interest-bloom { background: var(--blush); }
+    .interest-foliage { background: var(--green-leaf); }
+    .interest-structure { background: var(--stone); }
+    .interest-fragrance { background: var(--lavender); }
+    .interest-color { background: var(--rust); }
+    .interest-seed { background: var(--gold-dim); }
+    .interest-none { background: transparent; }
+
+    .seasonal-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 0.75rem 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-family: var(--font-sans);
+    }
+    .legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ─── COST CARD ─── */
+    .cost-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .cost-amount {
+      font-family: var(--font-sans);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--gold-light);
+      letter-spacing: -0.02em;
+    }
+    .cost-label {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.2rem;
+    }
+    .cost-note { font-size: 0.8rem; color: var(--muted); }
+
+    /* ─── UNIFYING PALETTE ─── */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .palette-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .palette-card-header {
+      padding: 1rem 1.2rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .palette-plant-name { font-size: 0.95rem; color: var(--cream); margin-bottom: 0.2rem; }
+    .palette-botanical { font-size: 0.78rem; font-style: italic; color: var(--muted); }
+    .palette-areas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      padding: 0.75rem 1.2rem;
+    }
+    .palette-area-chip {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: var(--green-dark);
+      color: var(--green-light);
+      border: 1px solid var(--moss);
+    }
+    .palette-role {
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding: 0 1.2rem 0.75rem;
+    }
+
+    /* ─── PLANT TABLE ─── */
+    .plant-table-wrap { overflow-x: auto; }
+    .plant-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .plant-table th {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      text-align: left;
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-elevated);
+      white-space: nowrap;
+    }
+    .plant-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--muted-light);
+    }
+    .plant-table tr:last-child td { border-bottom: none; }
+    .plant-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .plant-table td:first-child { color: var(--cream); font-style: italic; }
+    .qty-pill {
+      display: inline-block;
+      background: var(--green-dark);
+      color: var(--green-light);
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-family: var(--font-sans);
+      border: 1px solid var(--moss);
+    }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 0;
+      color: var(--muted);
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-note { color: var(--muted); }
+    .footer-date { color: var(--gold-dim); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .plants-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+      .area-meta-row { gap: 1rem; }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.6s ease forwards; }
+
+    /* ─── SECTION LABEL ─── */
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Subsection headings */
+    .subsection-heading {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .subsection-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════ -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Master Planting Plan · 2026</div>
+    <h1>Devon <span>House</span></h1>
+    <div class="hero-address">3301 Devon Road · Durham, NC · Hope Valley</div>
+    <p class="hero-desc">
+      Heightened naturalism within structured rooms — plants that feel as though 
+      they emerged from the landscape, not placed upon it. A Cotswolds sensibility 
+      translated to the red clay of the Piedmont.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Style</span>
+        <span class="hero-meta-value">1927 English Tudor</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Hardiness Zone</span>
+        <span class="hero-meta-value">USDA 7b</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Design Inspiration</span>
+        <span class="hero-meta-value">Dan Pearson · Old Rectory</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Areas Designed</span>
+        <span class="hero-meta-value">A–F (6 areas)</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     STICKY NAV
+════════════════════════════════════════════════════ -->
+<nav class="sticky-nav">
+  <div class="nav-inner">
+    <a href="#overview" class="nav-item"><span class="nav-badge">◈</span>Overview</a>
+    <a href="#principles" class="nav-item"><span class="nav-badge">✦</span>Principles</a>
+    <a href="#area-a" class="nav-item"><span class="nav-badge">A</span>Gate Left</a>
+    <a href="#area-b" class="nav-item"><span class="nav-badge">B</span>Gate Right</a>
+    <a href="#area-c" class="nav-item"><span class="nav-badge">C</span>Island Bed</a>
+    <a href="#area-d" class="nav-item"><span class="nav-badge">D</span>Football Bed</a>
+    <a href="#area-e" class="nav-item"><span class="nav-badge">E</span>Crape Myrtle</a>
+    <a href="#area-f" class="nav-item"><span class="nav-badge">F</span>Chimney Bed</a>
+    <a href="#palette" class="nav-item"><span class="nav-badge">◉</span>Palette</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     OVERVIEW
+════════════════════════════════════════════════════ -->
+<section id="overview" class="section" style="scroll-margin-top:60px;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Property Overview</div>
+      <h2 class="section-title">Zone Map</h2>
+      <p class="section-subtitle">Rough orientation — not to scale. All six designed areas shown.</p>
+    </div>
+
+    <div class="overview-map-wrapper">
+      <svg class="map-svg" viewBox="0 0 640 560" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#2e2b24" stroke-width="1"/>
+          </pattern>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Background -->
+        <rect width="640" height="560" fill="#131210" rx="10"/>
+
+        <!-- Road labels -->
+        <text x="320" y="30" text-anchor="middle" fill="#8a8070" font-size="11" letter-spacing="4" font-family="sans-serif" text-transform="uppercase">DEVON ROAD (NORTH)</text>
+        <line x1="40" y1="38" x2="590" y2="38" stroke="#2e2b24" stroke-width="1"/>
+
+        <text x="615" y="300" text-anchor="middle" fill="#8a8070" font-size="10" letter-spacing="3" font-family="sans-serif" transform="rotate(90,615,300)">DOVER RD (EAST)</text>
+        <line x1="600" y1="50" x2="600" y2="530" stroke="#2e2b24" stroke-width="1"/>
+
+        <text x="25" y="300" text-anchor="middle" fill="#8a8070" font-size="10" letter-spacing="2" font-family="sans-serif" transform="rotate(-90,25,300)">NEIGHBOR (WEST)</text>
+        <line x1="38" y1="50" x2="38" y2="530" stroke="#2e2b24" stroke-width="1"/>
+
+        <text x="320" y="548" text-anchor="middle" fill="#8a8070" font-size="11" letter-spacing="3" font-family="sans-serif">SOUTH</text>
+        <line x1="40" y1="536" x2="590" y2="536" stroke="#2e2b24" stroke-width="1"/>
+
+        <!-- Property boundary -->
+        <rect x="48" y="46" width="545" height="484" fill="none" stroke="#3a3629" stroke-width="1.5" rx="4" stroke-dasharray="6,3"/>
+
+        <!-- Driveway area (top) -->
+        <rect x="80" y="56" width="430" height="100" fill="#1a1815" stroke="#2e2b24" stroke-width="1" rx="4"/>
+        <text x="295" y="115" text-anchor="middle" fill="#6b6458" font-size="12" letter-spacing="3" font-family="sans-serif">DRIVEWAY (Phase 2)</text>
+
+        <!-- House -->
+        <rect x="195" y="175" width="250" height="120" fill="#1e1c18" stroke="#4a5c3a" stroke-width="2" rx="6"/>
+        <text x="320" y="233" text-anchor="middle" fill="#8ec47a" font-size="14" letter-spacing="2" font-family="sans-serif">HOUSE</text>
+        <text x="320" y="254" text-anchor="middle" fill="#5a7a4a" font-size="9" letter-spacing="3" font-family="sans-serif">1927 ENGLISH TUDOR</text>
+
+        <!-- Chimney indicator -->
+        <rect x="195" y="175" width="55" height="35" fill="#2a2820" stroke="#4a5c3a" stroke-width="1.5" rx="3"/>
+        <text x="222" y="196" text-anchor="middle" fill="#8a8070" font-size="8" font-family="sans-serif">CHIMNEY</text>
+
+        <!-- Gate -->
+        <rect x="285" y="305" width="70" height="22" fill="#1a1815" stroke="#c9a84c" stroke-width="1.5" rx="3"/>
+        <text x="320" y="320" text-anchor="middle" fill="#c9a84c" font-size="10" letter-spacing="2" font-family="sans-serif">GATE</text>
+
+        <!-- Pool area -->
+        <rect x="220" y="370" width="200" height="120" fill="#1a1c1e" stroke="#3a4a55" stroke-width="1.5" rx="6"/>
+        <text x="320" y="433" text-anchor="middle" fill="#5a7888" font-size="12" letter-spacing="2" font-family="sans-serif">POOL AREA</text>
+        <text x="320" y="452" text-anchor="middle" fill="#3a5060" font-size="8" letter-spacing="2" font-family="sans-serif">Phase 1B</text>
+
+        <!-- ─── AREA A: Gate Left ─── -->
+        <path d="M270 296 Q255 295 248 305 Q243 318 250 325 Q260 333 285 327 L285 305 Z" 
+              fill="rgba(139,122,184,0.15)" stroke="#8b7ab8" stroke-width="1.5"/>
+        <text x="255" y="316" text-anchor="middle" fill="#b8aae0" font-size="9" font-weight="bold" font-family="sans-serif">A</text>
+
+        <!-- ─── AREA B: Gate Right ─── -->
+        <path d="M355 296 Q368 295 375 305 Q380 318 373 325 Q363 333 355 327 L355 305 Z"
+              fill="rgba(90,122,74,0.2)" stroke="#5a7a4a" stroke-width="1.5"/>
+        <text x="370" y="316" text-anchor="middle" fill="#8ec47a" font-size="9" font-weight="bold" font-family="sans-serif">B</text>
+
+        <!-- ─── AREA C: Island Bed (driveway center) ─── -->
+        <ellipse cx="295" cy="106" rx="65" ry="38" 
+                 fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="295" y="102" text-anchor="middle" fill="#e2c26e" font-size="9" font-weight="bold" font-family="sans-serif">C</text>
+        <text x="295" y="115" text-anchor="middle" fill="#8a6f30" font-size="8" font-family="sans-serif">Island Bed</text>
+
+        <!-- ─── AREA D: Football Bed ─── -->
+        <ellipse cx="450" cy="128" rx="80" ry="30"
+                 fill="rgba(201,168,76,0.08)" stroke="#8a6f30" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="450" y="125" text-anchor="middle" fill="#c9a84c" font-size="9" font-weight="bold" font-family="sans-serif">D</text>
+        <text x="450" y="138" text-anchor="middle" fill="#8a6f30" font-size="8" font-family="sans-serif">Football Bed</text>
+
+        <!-- ─── AREA E: Crape Myrtle Bed ─── -->
+        <rect x="158" y="242" width="36" height="80" rx="4"
+              fill="rgba(122,158,138,0.15)" stroke="#7a9e8a" stroke-width="1.5"/>
+        <text x="176" y="282" text-anchor="middle" fill="#7a9e8a" font-size="9" font-weight="bold" font-family="sans-serif">E</text>
+        <!-- crape myrtle row -->
+        <circle cx="176" cy="250" r="5" fill="rgba(122,158,138,0.4)" stroke="#7a9e8a" stroke-width="1"/>
+        <circle cx="176" cy="263" r="5" fill="rgba(122,158,138,0.4)" stroke="#7a9e8a" stroke-width="1"/>
+        <circle cx="176" cy="276" r="5" fill="rgba(122,158,138,0.4)" stroke="#7a9e8a" stroke-width="1"/>
+        <circle cx="176" cy="289" r="5" fill="rgba(122,158,138,0.4)" stroke="#7a9e8a" stroke-width="1"/>
+        <circle cx="176" cy="302" r="5" fill="rgba(122,158,138,0.4)" stroke="#7a9e8a" stroke-width="1"/>
+        <circle cx="176" cy="315" r="5" fill="rgba(122,158,138,0.4)" stroke="#7a9e8a" stroke-width="1"/>
+
+        <!-- ─── AREA F: Chimney Bed ─── -->
+        <rect x="75" y="175" width="115" height="95" rx="4"
+              fill="rgba(184,92,56,0.1)" stroke="#b85c38" stroke-width="1.5"/>
+        <text x="133" y="222" text-anchor="middle" fill="#e8906a" font-size="9" font-weight="bold" font-family="sans-serif">F</text>
+        <text x="133" y="234" text-anchor="middle" fill="#8a5030" font-size="8" font-family="sans-serif">Chimney Bed</text>
+        <!-- Japanese maple dot -->
+        <circle cx="133" cy="205" r="10" fill="rgba(184,92,56,0.2)" stroke="#b85c38" stroke-width="1" stroke-dasharray="2,1"/>
+        <text x="133" y="208" text-anchor="middle" fill="#b85c38" font-size="7" font-family="sans-serif">JM</text>
+
+        <!-- Legend -->
+        <rect x="55" y="440" width="155" height="82" fill="rgba(14,13,11,0.8)" stroke="#2e2b24" stroke-width="1" rx="4"/>
+        <text x="65" y="458" fill="#8a8070" font-size="9" letter-spacing="2" font-family="sans-serif">LEGEND</text>
+        <rect x="65" y="465" width="10" height="6" rx="2" fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="1"/>
+        <text x="81" y="472" fill="#8a8070" font-size="9" font-family="sans-serif">Temporary (1-2yr)</text>
+        <rect x="65" y="478" width="10" height="6" rx="2" fill="rgba(90,122,74,0.2)" stroke="#5a7a4a" stroke-width="1"/>
+        <text x="81" y="485" fill="#8a8070" font-size="9" font-family="sans-serif">Permanent</text>
+        <rect x="65" y="491" width="10" height="6" rx="2" fill="rgba(26,28,30,0.9)" stroke="#3a4a55" stroke-width="1"/>
+        <text x="81" y="498" fill="#8a8070" font-size="9" font-family="sans-serif">Pool (Phase 1B)</text>
+        <text x="65" y="514" fill="#c9a84c" font-size="8" font-family="sans-serif">A–F Designed areas</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     DESIGN PRINCIPLES
+════════════════════════════════════════════════════ -->
+<section id="principles" class="section" style="scroll-margin-top:60px;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Design Philosophy</div>
+      <h2 class="section-title">The Pearson Principles</h2>
+      <p class="section-subtitle">Applied across all six areas — a framework, not a formula.</p>
+    </div>
+    <div class="principles-grid">
+      <div class="principle-card">
+        <div class="principle-num">01</div>
+        <div class="principle-text"><strong>Heightened naturalism</strong> — plants should feel like they belong, as if they emerged from the landscape</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">02</div>
+        <div class="principle-text"><strong>Layering</strong> — canopy → sub-canopy → structural → herbaceous → ground → climbers</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">03</div>
+        <div class="principle-text"><strong>Stone/plant relationships</strong> — plants softening, draping over, emerging from stone and stucco</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">04</div>
+        <div class="principle-text"><strong>Seasonal rhythm</strong> — overlapping waves of interest, not abrupt seasonal shows</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">05</div>
+        <div class="principle-text"><strong>Scent as spatial marker</strong> — fragrant plants at thresholds, gates, entries</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">06</div>
+        <div class="principle-text"><strong>Structure + looseness</strong> — clipped forms alternating with loose, naturalistic forms</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">07</div>
+        <div class="principle-text"><strong>Colour-themed zones</strong> — each space has a distinct palette and mood</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">08</div>
+        <div class="principle-text"><strong>Formality near house, naturalism further out</strong></div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">09</div>
+        <div class="principle-text"><strong>Repetition for rhythm</strong> — key plants repeated across areas for cohesion</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">10</div>
+        <div class="principle-text"><strong>NC native/adapted species</strong> — Cotswolds aesthetic translated to Durham climate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AREA A
+════════════════════════════════════════════════════ -->
+<section id="area-a" class="area-section" style="scroll-margin-top:60px;">
+  <div class="container">
+
+    <div class="area-header">
+      <div class="area-letter">A</div>
+      <div class="area-title-block">
+        <div class="area-badges">
+          <span class="badge badge-perm">● Permanent</span>
+          <span class="badge badge-shade">◑ Part Shade</span>
+          <span class="badge badge-zone">Zone 7b</span>
+        </div>
+        <h2>Gate Left — Narrow Curve</h2>
+        <p style="color:var(--muted-light); margin-top:0.5rem;">Left of wrought iron gate · Between stucco wall/pillar and holly hedge · ~2–3 ft wide</p>
+        <div class="area-meta-row">
+          <div class="area-meta-item">
+            <div class="area-meta-label">Conditions</div>
+            <div class="area-meta-value">Part shade · Pines overhead · Tight space</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Design Intent</div>
+            <div class="area-meta-value">Fragrant threshold · Soften wall corner</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Plant Count</div>
+            <div class="area-meta-value">1 specimen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="area-intent">
+      "Scent as spatial marker" — this is the left flank of a fragrance corridor paired with Sarcococca on Area B. 
+      Walking through the gate in late winter: scent from both sides. Designing for emotional response at the 
+      threshold between front and back garden — a Pearson signature move.
+    </div>
+
+    <!-- Plants -->
+    <div class="subsection-heading">Selected Plant</div>
+    <div class="plants-grid">
+      <!-- Daphne -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Daphne_odora_Aureomarginata_3.jpg/640px-Daphne_odora_Aureomarginata_3.jpg"
+            alt="Daphne odora Aureomarginata"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌸</div>
+            <div class="ph-name">Daphne odora 'Aureomarginata'</div>
+          </div>
+          <div class="plant-badge-strip">
+            <span class="plant-tag plant-tag-new">New</span>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Winter Daphne</div>
+          <div class="plant-botanical">Daphne odora 'Aureomarginata'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row">
+              <span class="detail-label">Size</span>
+              <span class="detail-value">3–4 ft mounding, naturally narrow</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Role</span>
+              <span class="detail-value">Fragrant threshold, soften wall corner</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Bloom</span>
+              <span class="detail-value">Feb–Mar · Intensely fragrant</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Foliage</span>
+              <span class="detail-value">Evergreen · Cream-edged leaves</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Why</span>
+              <span class="detail-value">Atmospheric, sensory, emergent — the Pearson qualities</span>
+            </div>
+          </div>
+          <div class="plant-qty-badge">× 1 specimen</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layering -->
+    <div class="subsection-heading">Layering Diagram</div>
+    <div class="layering-section">
+      <div class="layering-diagram">
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div>
+            <div class="layer-dot"></div>
+            <div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Overhead Canopy</div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-canopy">Pine trees (existing)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div>
+            <div class="layer-dot"></div>
+            <div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Structural Mid</div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-structural">Daphne odora 'Aureomarginata' <em class="layer-new-badge">NEW</em></span>
+              <span class="layer-plant-pill layer-structural">Holly hedge (existing)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div>
+            <div class="layer-dot"></div>
+            <div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Ground</div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-ground">Flagstone walkway</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal -->
+    <div class="subsection-heading">Seasonal Interest</div>
+    <div class="seasonal-section">
+      <div class="seasonal-chart">
+        <div class="seasonal-header">
+          <div class="seasonal-col-header" style="text-align:left; padding-left:0.75rem;">Plant</div>
+          <div class="seasonal-col-header">Winter</div>
+          <div class="seasonal-col-header">Spring</div>
+          <div class="seasonal-col-header">Summer</div>
+          <div class="seasonal-col-header">Fall</div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Daphne odora</div>
+          <div class="seasonal-cell"><div class="season-block interest-fragrance" title="Peak fragrance bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage" title="Evergreen foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage" title="Evergreen foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage" title="Evergreen foliage"></div></div>
+        </div>
+        <div class="seasonal-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--lavender);"></div>Fragrance/Bloom</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green-leaf);"></div>Evergreen foliage</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AREA B
+════════════════════════════════════════════════════ -->
+<section id="area-b" class="area-section" style="scroll-margin-top:60px;">
+  <div class="container">
+
+    <div class="area-header">
+      <div class="area-letter">B</div>
+      <div class="area-title-block">
+        <div class="area-badges">
+          <span class="badge badge-perm">● Permanent</span>
+          <span class="badge badge-shade">◔ Heavy Shade</span>
+          <span class="badge badge-zone">Zone 7b</span>
+        </div>
+        <h2>Gate Right — Against House Wall</h2>
+        <p style="color:var(--muted-light); margin-top:0.5rem;">Right of wrought iron gate · Between stucco wall and gate pillar · Large camellia above</p>
+        <div class="area-meta-row">
+          <div class="area-meta-item">
+            <div class="area-meta-label">Conditions</div>
+            <div class="area-meta-value">Heavy shade · House wall + camellia canopy</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Design Intent</div>
+            <div class="area-meta-value">Fill mid-layer gap · Complete vertical layering</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Plant Count</div>
+            <div class="area-meta-value">1 new + 2 existing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="area-intent">
+      Classic Pearson woodland-edge layering. All three plants bloom in the same winter window — 
+      camellia (pink) + sarcococca (white, fragrant) + hellebore (pink/mauve). Multiple textures and 
+      scents rewarding close attention in the quiet season. The mounding habit softens the stucco wall naturally.
+    </div>
+
+    <div class="subsection-heading">Plants — Existing + New</div>
+    <div class="plants-grid">
+      <!-- Camellia -->
+      <div class="plant-card existing">
+        <div class="plant-img-wrap">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/CamelliaJaponicaBlossoms.jpg/640px-CamelliaJaponicaBlossoms.jpg"
+            alt="Camellia japonica"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌺</div>
+            <div class="ph-name">Camellia japonica</div>
+          </div>
+          <div class="plant-badge-strip">
+            <span class="plant-tag plant-tag-existing">Existing · Keep</span>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Japanese Camellia</div>
+          <div class="plant-botanical">Camellia japonica</div>
+          <div class="plant-details">
+            <div class="plant-detail-row">
+              <span class="detail-label">Size</span>
+              <span class="detail-value">6–8 ft · Sub-canopy</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Role</span>
+              <span class="detail-value">Sub-canopy structural · Winter pink blooms</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Bloom</span>
+              <span class="detail-value">Winter · Pink flowers</span>
+            </div>
+          </div>
+          <div class="plant-qty-badge">Established specimen</div>
+        </div>
+      </div>
+
+      <!-- Sarcococca -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Sarcococca_confusa_kz1.jpg/640px-Sarcococca_confusa_kz1.jpg"
+            alt="Sarcococca confusa"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌿</div>
+            <div class="ph-name">Sarcococca confusa</div>
+          </div>
+          <div class="plant-badge-strip">
+            <span class="plant-tag plant-tag-new">New</span>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Sweet Box</div>
+          <div class="plant-botanical">Sarcococca confusa</div>
+          <div class="plant-details">
+            <div class="plant-detail-row">
+              <span class="detail-label">Size</span>
+              <span class="detail-value">3–4 ft · Natural mounding</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Role</span>
+              <span class="detail-value">Structural mid-layer · Winter fragrance</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Bloom</span>
+              <span class="detail-value">Jan–Feb · White, intensely fragrant</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Foliage</span>
+              <span class="detail-value">Evergreen · Glossy dark green</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Special</span>
+              <span class="detail-value">Deep shade lover — thrives against house walls</span>
+            </div>
+          </div>
+          <div class="plant-qty-badge">× 1 specimen</div>
+        </div>
+      </div>
+
+      <!-- Hellebore -->
+      <div class="plant-card existing">
+        <div class="plant-img-wrap">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Helleborus_orientalis2.jpg/640px-Helleborus_orientalis2.jpg"
+            alt="Helleborus orientalis"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌷</div>
+            <div class="ph-name">Helleborus orientalis</div>
+          </div>
+          <div class="plant-badge-strip">
+            <span class="plant-tag plant-tag-existing">Existing · Keep</span>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Lenten Rose</div>
+          <div class="plant-botanical">Helleborus orientalis</div>
+          <div class="plant-details">
+            <div class="plant-detail-row">
+              <span class="detail-label">Size</span>
+              <span class="detail-value">1–2 ft · Ground layer</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Role</span>
+              <span class="detail-value">Ground layer · Winter/spring bloom</span>
+            </div>
+            <div class="plant-detail-row">
+              <span class="detail-label">Bloom</span>
+              <span class="detail-value">Feb–Apr · Pink/mauve nodding heads</span>
+            </div>
+          </div>
+          <div class="plant-qty-badge">Established drift</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layering -->
+    <div class="subsection-heading">Layering Diagram</div>
+    <div class="layering-section">
+      <div class="layering-diagram">
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div>
+            <div class="layer-dot"></div>
+            <div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Sub-canopy</div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-sub">Camellia japonica <em style="font-style:normal; font-size:0.7rem; color:var(--moss);">(6–8 ft)</em></span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div>
+            <div class="layer-dot"></div>
+            <div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Structural Mid</div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-structural">Sarcococca confusa <em class="layer-new-badge">NEW</em> <em style="font-style:normal; font-size:0.7rem; color:var(--moss);">(3–4 ft)</em></span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div>
+            <div class="layer-dot"></div>
+            <div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Ground Layer</div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-ground">Helleborus orientalis <em style="font-style:normal; font-size:0.7rem; color:var(--moss);">(1–2 ft)</em></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal -->
+    <div class="subsection-heading">Seasonal Interest — Winter Vignette</div>
+    <div class="seasonal-section">
+      <div class="seasonal-chart">
+        <div class="seasonal-header">
+          <div class="seasonal-col-header" style="text-align:left; padding-left:0.75rem;">Plant</div>
+          <div class="seasonal-col-header">Winter</div>
+          <div class="seasonal-col-header">Spring</div>
+          <div class="seasonal-col-header">Summer</div>
+          <div class="seasonal-col-header">Fall</div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Camellia japonica</div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Sarcococca confusa</div>
+          <div class="seasonal-cell"><div class="season-block interest-fragrance"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Helleborus orientalis</div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+        </div>
+        <div class="seasonal-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--blush);"></div>Bloom</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--lavender);"></div>Fragrance bloom</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green-leaf);"></div>Evergreen foliage</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AREA C
+════════════════════════════════════════════════════ -->
+<section id="area-c" class="area-section" style="scroll-margin-top:60px;">
+  <div class="container">
+
+    <div class="area-header">
+      <div class="area-letter">C</div>
+      <div class="area-title-block">
+        <div class="area-badges">
+          <span class="badge badge-temp">⏳ Temporary 1–2yr</span>
+          <span class="badge badge-sun">☀ Full Sun</span>
+          <span class="badge badge-zone">Mid-March 2026</span>
+        </div>
+        <h2>Driveway Island Bed</h2>
+        <p style="color:var(--muted-light); margin-top:0.5rem;">Center of driveway loop · Raised stone-edged oval · ~30 × 36 ft</p>
+        <div class="area-meta-row">
+          <div class="area-meta-item">
+            <div class="area-meta-label">Conditions</div>
+            <div class="area-meta-value">Full sun all day · Stone wall edging</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Design Intent</div>
+            <div class="area-meta-value">Billowing arrival garden · Soft purples, blues, silvers</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Total Plants</div>
+            <div class="area-meta-value">187 plants + annuals</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Est. Cost</div>
+            <div class="area-meta-value">~$1,145</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="area-intent">
+      Billowing arrival garden — the first thing you see pulling in. Soft purples, blues, silvers, whites. 
+      English cottage border feel but planted fast and affordable. Plants spill over the stone edges — 
+      the key Pearson stone/plant relationship.
+    </div>
+
+    <!-- Plant table first for quick overview -->
+    <div class="subsection-heading">Plant Schedule</div>
+    <div class="plant-table-wrap" style="margin-bottom:2.5rem;">
+      <table class="plant-table">
+        <thead>
+          <tr>
+            <th>Plant</th>
+            <th>Qty</th>
+            <th>Role</th>
+            <th>Position</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>'Northwind' Switchgrass</td><td><span class="qty-pill">1</span></td><td>Vertical anchor</td><td>Dead center</td></tr>
+          <tr><td>Russian Sage</td><td><span class="qty-pill">12</span></td><td>Structural mid-layer</td><td>Inner ring</td></tr>
+          <tr><td>'Walker's Low' Catmint</td><td><span class="qty-pill">24</span></td><td>Blue-purple drifts</td><td>Mid-layer</td></tr>
+          <tr><td>'Phenomenal' Lavender</td><td><span class="qty-pill">12</span></td><td>Structure, silver foliage</td><td>Mid-layer</td></tr>
+          <tr><td>Purple Coneflower 'Magnus'</td><td><span class="qty-pill">18</span></td><td>Pink-purple daisies</td><td>Mid-layer drifts</td></tr>
+          <tr><td>Blue False Indigo</td><td><span class="qty-pill">6</span></td><td>Blue spires, structural</td><td>Inner ring</td></tr>
+          <tr><td>'Rozanne' Geranium</td><td><span class="qty-pill">20</span></td><td>Blue-violet carpet</td><td>Edge, spilling over stone</td></tr>
+          <tr><td>Lamb's Ear 'Big Ears'</td><td><span class="qty-pill">16</span></td><td>Silver felt edge</td><td>Edge, spilling over stone</td></tr>
+          <tr><td>White Cosmos 'Purity'</td><td><span class="qty-pill">36</span></td><td>Annual filler, airy white</td><td>Woven throughout</td></tr>
+          <tr><td>Larkspur (mix)</td><td><span class="qty-pill">24</span></td><td>Annual, blue/purple spires</td><td>Woven throughout</td></tr>
+          <tr><td>Tall Verbena</td><td><span class="qty-pill">18</span></td><td>Annual, purple on wiry stems</td><td>Woven throughout</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Plant cards (perennials) -->
+    <div class="subsection-heading">Perennial Plant Profiles</div>
+    <div class="plants-grid">
+
+      <!-- Northwind Switchgrass -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Panicum_virgatum_Northwind_2019.jpg/640px-Panicum_virgatum_Northwind_2019.jpg"
+            alt="Panicum virgatum Northwind" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌾</div>
+            <div class="ph-name">Panicum virgatum 'Northwind'</div>
+          </div>
+          <div class="plant-badge-strip"><span class="plant-tag plant-tag-new">Anchor</span></div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">'Northwind' Switchgrass</div>
+          <div class="plant-botanical">Panicum virgatum 'Northwind'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">5–6 ft tall · Upright</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Vertical anchor, dead center</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Blue-green summer → golden fall; seed heads into winter</span></div>
+          </div>
+          <div class="plant-qty-badge">× 1</div>
+        </div>
+      </div>
+
+      <!-- Russian Sage -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Perovskia_atriplicifolia2.jpg/640px-Perovskia_atriplicifolia2.jpg"
+            alt="Salvia yangii Russian Sage" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">💜</div>
+            <div class="ph-name">Salvia yangii (Russian Sage)</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Russian Sage</div>
+          <div class="plant-botanical">Salvia yangii</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">3–4 ft · Airy cloud</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Lavender haze, structural mid-layer</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Silver stems · Blue-purple all summer into fall</span></div>
+          </div>
+          <div class="plant-qty-badge">× 12</div>
+        </div>
+      </div>
+
+      <!-- Catmint -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Nepeta_x_faassenii_03.jpg/640px-Nepeta_x_faassenii_03.jpg"
+            alt="Nepeta Walker's Low" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🫐</div>
+            <div class="ph-name">Nepeta 'Walker's Low'</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Catmint 'Walker's Low'</div>
+          <div class="plant-botanical">Nepeta racemosa 'Walker's Low'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">18–24 in · Billowing mound</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Blue-purple drifts · Unifying palette plant</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">May–Oct bloom · Reblooms if cut back · Deer resistant</span></div>
+          </div>
+          <div class="plant-qty-badge">× 24</div>
+        </div>
+      </div>
+
+      <!-- Lavender -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Lavandula_angustifolia1.jpg/640px-Lavandula_angustifolia1.jpg"
+            alt="Lavandula Phenomenal" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🪻</div>
+            <div class="ph-name">Lavandula 'Phenomenal'</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Lavender 'Phenomenal'</div>
+          <div class="plant-botanical">Lavandula × intermedia 'Phenomenal'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">24–30 in · Compact mound</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Structure, silver foliage, fragrance</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Zone 5–8 hardy · Long-lived for a lavender</span></div>
+          </div>
+          <div class="plant-qty-badge">× 12</div>
+        </div>
+      </div>
+
+      <!-- Echinacea -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Echinacea_purpurea_Magnus.jpg/640px-Echinacea_purpurea_Magnus.jpg"
+            alt="Echinacea purpurea Magnus" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌸</div>
+            <div class="ph-name">Echinacea purpurea 'Magnus'</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Purple Coneflower 'Magnus'</div>
+          <div class="plant-botanical">Echinacea purpurea 'Magnus'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">3–4 ft · Upright</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Pink-purple daisies · Pollinator magnet</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Jul–Sep bloom · Seed heads feed birds in fall/winter</span></div>
+          </div>
+          <div class="plant-qty-badge">× 18</div>
+        </div>
+      </div>
+
+      <!-- Baptisia -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Baptisia_australis_bloom.jpg/640px-Baptisia_australis_bloom.jpg"
+            alt="Baptisia australis" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🫧</div>
+            <div class="ph-name">Baptisia australis</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Blue False Indigo</div>
+          <div class="plant-botanical">Baptisia australis</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">3–4 ft · Structural mound</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Blue-indigo spires · Early structural interest</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Apr–May bloom · Blue-grey foliage through summer · Inflated seed pods</span></div>
+          </div>
+          <div class="plant-qty-badge">× 6</div>
+        </div>
+      </div>
+
+      <!-- Rozanne Geranium -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Geranium_Rozanne_1.jpg/640px-Geranium_Rozanne_1.jpg"
+            alt="Geranium Rozanne" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">💙</div>
+            <div class="ph-name">Geranium 'Rozanne'</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Cranesbill 'Rozanne'</div>
+          <div class="plant-botanical">Geranium 'Rozanne'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">12–18 in · Sprawling carpet</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Edge carpet, spills over stone · Unifying palette</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Jun–Oct bloom · Blue-violet with white eye · Very long season</span></div>
+          </div>
+          <div class="plant-qty-badge">× 20</div>
+        </div>
+      </div>
+
+      <!-- Lamb's Ear -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Stachys_byzantina_2.jpg/640px-Stachys_byzantina_2.jpg"
+            alt="Stachys byzantina Lamb's Ear" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌿</div>
+            <div class="ph-name">Stachys byzantina</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Lamb's Ear 'Big Ears'</div>
+          <div class="plant-botanical">Stachys byzantina 'Big Ears'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">6–12 in · Low spreading</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Silver felt edge, spills over stone</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Silver-woolly foliage · Contrasts with purple blooms</span></div>
+          </div>
+          <div class="plant-qty-badge">× 16</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Layering -->
+    <div class="subsection-heading">Layering Diagram — Oval Composition</div>
+    <div class="layering-section">
+      <div class="layering-diagram">
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Vertical Anchor<br/><em style="font-size:0.7rem; color:var(--muted)">Center</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-structural">Panicum 'Northwind' (5–6 ft)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Structural Mid<br/><em style="font-size:0.7rem; color:var(--muted)">Inner ring</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-sub">Russian Sage (3–4 ft)</span>
+              <span class="layer-plant-pill layer-sub">Baptisia (3–4 ft)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Herbaceous<br/><em style="font-size:0.7rem; color:var(--muted)">Mid drifts</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-herbaceous">Catmint (18–24 in)</span>
+              <span class="layer-plant-pill layer-herbaceous">Lavender (24–30 in)</span>
+              <span class="layer-plant-pill layer-herbaceous">Echinacea (3–4 ft)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Edge / Stone<br/><em style="font-size:0.7rem; color:var(--muted)">Spills over stone</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-edge">Rozanne Geranium (12–18 in)</span>
+              <span class="layer-plant-pill layer-edge">Lamb's Ear (6–12 in)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Woven Annuals<br/><em style="font-size:0.7rem; color:var(--muted)">Throughout</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-ground">White Cosmos</span>
+              <span class="layer-plant-pill layer-ground">Larkspur</span>
+              <span class="layer-plant-pill layer-ground">Tall Verbena</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal -->
+    <div class="subsection-heading">Seasonal Interest</div>
+    <div class="seasonal-section">
+      <div class="seasonal-chart">
+        <div class="seasonal-header">
+          <div class="seasonal-col-header" style="text-align:left; padding-left:0.75rem;">Plant</div>
+          <div class="seasonal-col-header">Winter</div>
+          <div class="seasonal-col-header">Spring</div>
+          <div class="seasonal-col-header">Summer</div>
+          <div class="seasonal-col-header">Fall</div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Switchgrass</div>
+          <div class="seasonal-cell"><div class="season-block interest-seed"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-color"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Russian Sage</div>
+          <div class="seasonal-cell"><div class="season-block interest-structure"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Catmint</div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Lavender</div>
+          <div class="seasonal-cell"><div class="season-block interest-structure"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-fragrance"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Echinacea</div>
+          <div class="seasonal-cell"><div class="season-block interest-seed"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-seed"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Baptisia</div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-seed"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Rozanne Geranium</div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+        </div>
+        <div class="seasonal-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--blush);"></div>Bloom</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--lavender);"></div>Fragrant bloom</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green-leaf);"></div>Foliage</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--rust);"></div>Fall color</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--gold-dim);"></div>Seed heads</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--stone);"></div>Structure/stems</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cost -->
+    <div class="cost-card">
+      <div>
+        <div class="cost-label">Estimated Cost</div>
+        <div class="cost-amount">~$1,145</div>
+      </div>
+      <div class="cost-note">
+        Plants + soil amendments · Temporary planting (1–2 years before Phase 2 driveway demo) ·
+        Fast impact, nothing precious · Phase 2 hardscape will redesign this area.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AREA D
+════════════════════════════════════════════════════ -->
+<section id="area-d" class="area-section" style="scroll-margin-top:60px;">
+  <div class="container">
+
+    <div class="area-header">
+      <div class="area-letter">D</div>
+      <div class="area-title-block">
+        <div class="area-badges">
+          <span class="badge badge-temp">⏳ Temporary 1–2yr</span>
+          <span class="badge badge-sun">☀ Full Sun</span>
+          <span class="badge badge-zone">Mid-March 2026</span>
+        </div>
+        <h2>Football Bed</h2>
+        <p style="color:var(--muted-light); margin-top:0.5rem;">Oval bed along driveway near garage/guest house · ~25 × 15 ft · Brick edging</p>
+        <div class="area-meta-row">
+          <div class="area-meta-item">
+            <div class="area-meta-label">Conditions</div>
+            <div class="area-meta-value">Full sun · Brick edging · River rocks (to remove)</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Design Intent</div>
+            <div class="area-meta-value">Directional border · Low→tall from driveway to back</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Total Plants</div>
+            <div class="area-meta-value">96 plants + annuals</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Est. Cost</div>
+            <div class="area-meta-value">~$668</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="area-intent">
+      Simplified echo of the Island Bed — directional border with clear front (driveway) and back (garage). 
+      Height graduates low→tall. Afternoon sun backlights cosmos and verbena at rear. 
+      Blake's pick: Pink Muhly Grass at the rear — NC native, pink cloud seed heads Oct–Nov, glows when backlit.
+    </div>
+
+    <div class="subsection-heading">Plant Schedule</div>
+    <div class="plant-table-wrap" style="margin-bottom:2.5rem;">
+      <table class="plant-table">
+        <thead>
+          <tr><th>Plant</th><th>Qty</th><th>Role</th><th>Position</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>'Walker's Low' Catmint</td><td><span class="qty-pill">14</span></td><td>Dominant mid-layer</td><td>Mid</td></tr>
+          <tr><td>Russian Sage</td><td><span class="qty-pill">6</span></td><td>Tall back spine</td><td>Back</td></tr>
+          <tr><td>'Rozanne' Geranium</td><td><span class="qty-pill">12</span></td><td>Front edge</td><td>Front</td></tr>
+          <tr><td>Purple Coneflower 'Magnus'</td><td><span class="qty-pill">10</span></td><td>Mid-layer</td><td>Mid</td></tr>
+          <tr><td>Lamb's Ear 'Big Ears'</td><td><span class="qty-pill">10</span></td><td>Front edge, silver</td><td>Front</td></tr>
+          <tr><td>'Phenomenal' Lavender</td><td><span class="qty-pill">6</span></td><td>Structure, fragrance</td><td>Mid</td></tr>
+          <tr><td>White Cosmos 'Purity'</td><td><span class="qty-pill">24</span></td><td>Annual filler</td><td>Rear</td></tr>
+          <tr><td>Pink Muhly Grass ⭐</td><td><span class="qty-pill">4</span></td><td>Fall star, backlit</td><td>Back row</td></tr>
+          <tr><td>Tall Verbena</td><td><span class="qty-pill">10</span></td><td>Annual, rear, backlit</td><td>Rear</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection-heading">Star Plant — Blake's Pick</div>
+    <div class="plants-grid" style="max-width: 320px; margin-bottom: 2rem;">
+      <!-- Pink Muhly Grass -->
+      <div class="plant-card" style="border-color: var(--blush);">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Muhlenbergia_capillaris_USDA.jpg/640px-Muhlenbergia_capillaris_USDA.jpg"
+            alt="Muhlenbergia capillaris pink muhly grass" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none; background: linear-gradient(135deg, #3d2030 0%, #1e1015 100%);">
+            <div class="ph-icon" style="color:#c88888;">🌾</div>
+            <div class="ph-name">Muhlenbergia capillaris</div>
+          </div>
+          <div class="plant-badge-strip"><span class="plant-tag" style="background:rgba(200,136,136,0.3); color:#e8a0a0;">⭐ Blake's Pick</span></div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Pink Muhly Grass</div>
+          <div class="plant-botanical">Muhlenbergia capillaris</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">3 ft tall · Cloud-like</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Fall spectacle at rear · Backlit by afternoon sun</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">NC native · Pink cloud Oct–Nov · Glows when backlit</span></div>
+          </div>
+          <div class="plant-qty-badge">× 4 · Back row</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layering: Directional -->
+    <div class="subsection-heading">Directional Layout — Front to Back</div>
+    <div class="layering-section">
+      <div class="layering-diagram">
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Front (Driveway)</div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-edge">Rozanne Geranium (12–18 in)</span>
+              <span class="layer-plant-pill layer-edge">Lamb's Ear (6–12 in)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Mid-Layer</div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-herbaceous">Catmint (18–24 in)</span>
+              <span class="layer-plant-pill layer-herbaceous">Lavender (24–30 in)</span>
+              <span class="layer-plant-pill layer-herbaceous">Echinacea (3–4 ft)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Back Row<br/><em style="font-size:0.7rem; color:var(--muted)">Backlit · Garage</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-sub">Russian Sage (3–4 ft)</span>
+              <span class="layer-plant-pill" style="border-color:var(--blush); background:rgba(200,136,136,0.12); color:var(--cream);">Pink Muhly Grass (3 ft) ⭐</span>
+              <span class="layer-plant-pill layer-ground">Cosmos</span>
+              <span class="layer-plant-pill layer-ground">Verbena</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cost -->
+    <div class="cost-card">
+      <div>
+        <div class="cost-label">Estimated Cost</div>
+        <div class="cost-amount">~$668</div>
+      </div>
+      <div class="cost-note">
+        Plants + amendments · Same palette as Island Bed = visual unity across driveway · 
+        Temporary (1–2yr). River rocks: remove or repurpose as drainage under lavender.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AREA E
+════════════════════════════════════════════════════ -->
+<section id="area-e" class="area-section" style="scroll-margin-top:60px;">
+  <div class="container">
+
+    <div class="area-header">
+      <div class="area-letter">E</div>
+      <div class="area-title-block">
+        <div class="area-badges">
+          <span class="badge badge-perm">● Permanent</span>
+          <span class="badge badge-sun">◑ Full/Part Sun</span>
+          <span class="badge badge-zone">Mid-March 2026</span>
+        </div>
+        <h2>Crape Myrtle &amp; Holly Hedge Bed</h2>
+        <p style="color:var(--muted-light); margin-top:0.5rem;">Between driveway and gate area · Row of ~6 crape myrtles · Holly hedge behind</p>
+        <div class="area-meta-row">
+          <div class="area-meta-item">
+            <div class="area-meta-label">Conditions</div>
+            <div class="area-meta-value">Full sun → part shade under crape myrtle canopy</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Design Intent</div>
+            <div class="area-meta-value">Transition zone · Connects driveway to gate threshold</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Status Note</div>
+            <div class="area-meta-value">Crape myrtles + holly stay · Bed extends in future</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="area-intent">
+      The crape myrtle trunks are sculptural in winter — underplanting should complement, not compete. 
+      Visual bridge from sun-drenched driveway beds to the shade garden at the gate. 
+      Catmint ties to Areas C &amp; D; Hellebores tie to Area B — the unifying palette at work.
+    </div>
+
+    <div class="subsection-heading">Plant Schedule</div>
+    <div class="plant-table-wrap" style="margin-bottom:2.5rem;">
+      <table class="plant-table">
+        <thead>
+          <tr><th>Plant</th><th>Qty</th><th>Role</th><th>Note</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Crape Myrtles (existing)</td><td><span class="qty-pill">~6</span></td><td>Sub-canopy / structural</td><td>Keep · Freshly pruned</td></tr>
+          <tr><td>Holly hedge (existing)</td><td><span class="qty-pill">—</span></td><td>Backdrop screen</td><td>Keep</td></tr>
+          <tr><td>'Walker's Low' Catmint</td><td><span class="qty-pill">10</span></td><td>Between trunks</td><td>Links to C &amp; D palette</td></tr>
+          <tr><td>Helleborus orientalis</td><td><span class="qty-pill">8</span></td><td>Near holly base</td><td>Links to Area B</td></tr>
+          <tr><td>Aromatic Aster</td><td><span class="qty-pill">8</span></td><td>Fall bloom, pollinators</td><td>NC native</td></tr>
+          <tr><td>Allium 'Purple Sensation'</td><td><span class="qty-pill">30 bulbs</span></td><td>Spring globes</td><td>Rise above catmint</td></tr>
+          <tr><td>Colchicum autumnale</td><td><span class="qty-pill">20 bulbs</span></td><td>Fall surprise</td><td>Bloom from bare ground</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection-heading">Plant Profiles</div>
+    <div class="plants-grid">
+      <!-- Aromatic Aster -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Symphyotrichum_oblongifolium.jpg/640px-Symphyotrichum_oblongifolium.jpg"
+            alt="Aromatic aster Symphyotrichum oblongifolium" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌼</div>
+            <div class="ph-name">Aster oblongifolius</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Aromatic Aster</div>
+          <div class="plant-botanical">Symphyotrichum oblongifolium</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">18–24 in · Mounding</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Fall bloom, pollinator magnet</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Sep–Oct · Blue-violet flowers · Aromatic foliage · NC native</span></div>
+          </div>
+          <div class="plant-qty-badge">× 8</div>
+        </div>
+      </div>
+
+      <!-- Catmint (reference back) -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Nepeta_x_faassenii_03.jpg/640px-Nepeta_x_faassenii_03.jpg"
+            alt="Nepeta Walker's Low" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🫐</div>
+            <div class="ph-name">Nepeta 'Walker's Low'</div>
+          </div>
+          <div class="plant-badge-strip"><span class="plant-tag plant-tag-new">Unifying</span></div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Catmint 'Walker's Low'</div>
+          <div class="plant-botanical">Nepeta racemosa 'Walker's Low'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Between trunks · Links to Areas C &amp; D</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Creates visual thread along both stone walls</span></div>
+          </div>
+          <div class="plant-qty-badge">× 10</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal — the full year rhythm is the story here -->
+    <div class="subsection-heading">Seasonal Rhythm — Year-Round Interest</div>
+    <div class="seasonal-section">
+      <div class="seasonal-chart">
+        <div class="seasonal-header">
+          <div class="seasonal-col-header" style="text-align:left; padding-left:0.75rem;">Plant</div>
+          <div class="seasonal-col-header">Winter</div>
+          <div class="seasonal-col-header">Spring</div>
+          <div class="seasonal-col-header">Summer</div>
+          <div class="seasonal-col-header">Fall</div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Hellebores</div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Allium bulbs</div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Catmint</div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Crape Myrtles</div>
+          <div class="seasonal-cell"><div class="season-block interest-structure"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-color"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Aromatic Aster</div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Colchicum bulbs</div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+        </div>
+        <div class="seasonal-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--blush);"></div>Bloom</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green-leaf);"></div>Foliage</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--rust);"></div>Fall color</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--stone);"></div>Structural stems</div>
+          <p style="font-size:0.7rem; color:var(--muted); font-family:var(--font-sans); margin:0; flex-basis:100%;">
+            Seasonal continuity: hellebores (winter) → allium (spring) → catmint (summer) → aromatic aster + colchicum (fall)
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AREA F
+════════════════════════════════════════════════════ -->
+<section id="area-f" class="area-section" style="scroll-margin-top:60px;">
+  <div class="container">
+
+    <div class="area-header">
+      <div class="area-letter">F</div>
+      <div class="area-title-block">
+        <div class="area-badges">
+          <span class="badge badge-perm">● Permanent</span>
+          <span class="badge badge-shade">◑ Sun/Part Shade</span>
+          <span class="badge badge-zone">Zone 7b</span>
+        </div>
+        <h2>Chimney Bed — Front of House</h2>
+        <p style="color:var(--muted-light); margin-top:0.5rem;">In front of stone chimney · Left side along driveway approach · 18 ft × 8–13 ft deep</p>
+        <div class="area-meta-row">
+          <div class="area-meta-item">
+            <div class="area-meta-label">Conditions</div>
+            <div class="area-meta-value">Front edge sunny · Back/chimney part shade · Under cedar</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Design Intent</div>
+            <div class="area-meta-value">Woodland-edge composition · Japanese maple is the star</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Est. Cost</div>
+            <div class="area-meta-value">~$350–450</div>
+          </div>
+          <div class="area-meta-item">
+            <div class="area-meta-label">Removed</div>
+            <div class="area-meta-value">Azalea (coming out)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="area-intent">
+      Layered woodland-edge composition against the stone chimney. The Japanese maple is the star — 
+      everything else supports it. Catmint at the sunny front edge ties to driveway beds across the way. 
+      Should feel like walking past a woodland clearing on a Cotswolds estate.
+    </div>
+
+    <div class="subsection-heading">Plant Schedule</div>
+    <div class="plant-table-wrap" style="margin-bottom:2.5rem;">
+      <table class="plant-table">
+        <thead>
+          <tr><th>Plant</th><th>Qty</th><th>Role</th><th>Position</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Japanese Maple (existing)</td><td><span class="qty-pill">1</span></td><td>Star specimen</td><td>Center</td></tr>
+          <tr><td>Oakleaf Hydrangea 'Alice'</td><td><span class="qty-pill">2</span></td><td>Height, summer bloom, fall color</td><td>Back · Against chimney</td></tr>
+          <tr><td>Daphne odora 'Aureomarginata'</td><td><span class="qty-pill">1</span></td><td>Evergreen structure, winter fragrance</td><td>Mid-layer (shade) · ties to Area A</td></tr>
+          <tr><td>Aucuba japonica 'Nana'</td><td><span class="qty-pill">2</span></td><td>Gold-flecked evergreen, brightens shade</td><td>Mid-layer (shade)</td></tr>
+          <tr><td>Hakonechloa macra</td><td><span class="qty-pill">5</span></td><td>Cascading movement, golden-green</td><td>Around maple base</td></tr>
+          <tr><td>Helleborus orientalis</td><td><span class="qty-pill">7</span></td><td>Winter/spring bloom drifts</td><td>Shade zone, mid-to-back</td></tr>
+          <tr><td>'Walker's Low' Catmint</td><td><span class="qty-pill">7</span></td><td>Blue-purple billow, spills over wall</td><td>Front edge (sun)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection-heading">Plant Profiles</div>
+    <div class="plants-grid">
+
+      <!-- Japanese Maple -->
+      <div class="plant-card existing">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Acer_palmatum_006.jpg/640px-Acer_palmatum_006.jpg"
+            alt="Japanese Maple Acer palmatum" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none; background: linear-gradient(135deg, #3d1a0a 0%, #1e1008 100%);">
+            <div class="ph-icon" style="color:#c06030;">🍁</div>
+            <div class="ph-name">Japanese Maple</div>
+          </div>
+          <div class="plant-badge-strip">
+            <span class="plant-tag plant-tag-existing">Star Specimen</span>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Japanese Maple</div>
+          <div class="plant-botanical">Acer palmatum</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">The star — everything else supports it</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Stunning winter silhouette · Spring red → summer green → fall orange/scarlet</span></div>
+          </div>
+          <div class="plant-qty-badge">Existing · Center specimen</div>
+        </div>
+      </div>
+
+      <!-- Oakleaf Hydrangea -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Hydrangea_quercifolia_5.jpg/640px-Hydrangea_quercifolia_5.jpg"
+            alt="Hydrangea quercifolia Alice oakleaf hydrangea" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌸</div>
+            <div class="ph-name">Hydrangea quercifolia</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Oakleaf Hydrangea 'Alice'</div>
+          <div class="plant-botanical">Hydrangea quercifolia 'Alice'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">5–6 ft · Arching</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Height + summer bloom + fall color + winter bark</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">NC native · White cones summer → burgundy fall · Exfoliating bark</span></div>
+          </div>
+          <div class="plant-qty-badge">× 2 · Against chimney</div>
+        </div>
+      </div>
+
+      <!-- Daphne (cross-reference Area A) -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Daphne_odora_Aureomarginata_3.jpg/640px-Daphne_odora_Aureomarginata_3.jpg"
+            alt="Daphne odora Aureomarginata" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌸</div>
+            <div class="ph-name">Daphne odora 'Aureomarginata'</div>
+          </div>
+          <div class="plant-badge-strip"><span class="plant-tag plant-tag-new">↔ Area A</span></div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Winter Daphne</div>
+          <div class="plant-botanical">Daphne odora 'Aureomarginata'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Evergreen structure, winter fragrance · Echoes Area A</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Cream-edged leaves · Intensely fragrant Feb–Mar</span></div>
+          </div>
+          <div class="plant-qty-badge">× 1 · Mid-layer</div>
+        </div>
+      </div>
+
+      <!-- Aucuba -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Aucuba_japonica_variegata_1.jpg/640px-Aucuba_japonica_variegata_1.jpg"
+            alt="Aucuba japonica" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌿</div>
+            <div class="ph-name">Aucuba japonica</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Japanese Laurel 'Nana'</div>
+          <div class="plant-botanical">Aucuba japonica 'Nana'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">3–4 ft · Compact mound</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Gold-flecked evergreen, brightens deep shade</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Glossy gold-spotted leaves · Thrives in dense shade · Structural year-round</span></div>
+          </div>
+          <div class="plant-qty-badge">× 2 · Mid-layer shade</div>
+        </div>
+      </div>
+
+      <!-- Hakonechloa -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Hakonechloa_macra_Aureola_kz02.jpg/640px-Hakonechloa_macra_Aureola_kz02.jpg"
+            alt="Hakonechloa macra Japanese forest grass" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌾</div>
+            <div class="ph-name">Hakonechloa macra</div>
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Japanese Forest Grass</div>
+          <div class="plant-botanical">Hakonechloa macra</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Size</span><span class="detail-value">18 in · Cascading mound</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Cascading movement around maple base</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Golden-green → copper fall; adds flow to shade planting</span></div>
+          </div>
+          <div class="plant-qty-badge">× 5 · Around maple</div>
+        </div>
+      </div>
+
+      <!-- Hellebore Area F -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Helleborus_orientalis2.jpg/640px-Helleborus_orientalis2.jpg"
+            alt="Helleborus orientalis lenten rose" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🌷</div>
+            <div class="ph-name">Helleborus orientalis</div>
+          </div>
+          <div class="plant-badge-strip"><span class="plant-tag plant-tag-new">↔ B, E</span></div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Lenten Rose</div>
+          <div class="plant-botanical">Helleborus orientalis</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Winter/spring bloom drifts in shade · Echoes Areas B, E</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Nodding pink/mauve/white blooms Feb–Apr · Tough in shade</span></div>
+          </div>
+          <div class="plant-qty-badge">× 7 · Shade zone</div>
+        </div>
+      </div>
+
+      <!-- Catmint Area F -->
+      <div class="plant-card">
+        <div class="plant-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Nepeta_x_faassenii_03.jpg/640px-Nepeta_x_faassenii_03.jpg"
+            alt="Nepeta Walker's Low catmint" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="plant-img-placeholder" style="display:none;">
+            <div class="ph-icon">🫐</div>
+            <div class="ph-name">Nepeta 'Walker's Low'</div>
+          </div>
+          <div class="plant-badge-strip"><span class="plant-tag plant-tag-new">↔ C, D, E</span></div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-common">Catmint 'Walker's Low'</div>
+          <div class="plant-botanical">Nepeta racemosa 'Walker's Low'</div>
+          <div class="plant-details">
+            <div class="plant-detail-row"><span class="detail-label">Role</span><span class="detail-value">Front edge billow, spills over stone wall</span></div>
+            <div class="plant-detail-row"><span class="detail-label">Feature</span><span class="detail-value">Creates visual thread to driveway beds C &amp; D — you see catmint flowing along both stone walls</span></div>
+          </div>
+          <div class="plant-qty-badge">× 7 · Front edge (sun)</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Layering — the full stack -->
+    <div class="subsection-heading">Layering Diagram — Front to Back, Sun to Shade</div>
+    <div class="layering-section">
+      <div class="layering-diagram">
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Backdrop<br/><em style="font-size:0.7rem; color:var(--muted)">Stone chimney</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill" style="border-color:var(--stone); background:rgba(107,100,88,0.15); color:var(--cream);">Stone chimney wall (shade)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Height Layer<br/><em style="font-size:0.7rem; color:var(--muted)">5–6 ft</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-sub">Oakleaf Hydrangea 'Alice' <em class="layer-new-badge">NEW</em></span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Star Specimen<br/><em style="font-size:0.7rem; color:var(--muted)">Existing</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-canopy">Japanese Maple ⭐ (existing)</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Structural Mid<br/><em style="font-size:0.7rem; color:var(--muted)">3–4 ft · shade</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-structural">Aucuba + Daphne <em class="layer-new-badge">NEW</em></span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Ground · Shade<br/><em style="font-size:0.7rem; color:var(--muted)">Around maple</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-ground">Hakonechloa (18 in) <em class="layer-new-badge">NEW</em></span>
+              <span class="layer-plant-pill layer-ground">Hellebores (12 in) <em class="layer-new-badge">NEW</em></span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Front Edge · Sun<br/><em style="font-size:0.7rem; color:var(--muted)">Spills over stone wall</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill layer-edge">Catmint 'Walker's Low' (2 ft) <em class="layer-new-badge">NEW</em></span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-connector">
+            <div class="layer-line"></div><div class="layer-dot"></div><div class="layer-line"></div>
+          </div>
+          <div class="layer-content">
+            <div class="layer-tier-label">Transition<br/><em style="font-size:0.7rem; color:var(--muted)">Stone → sun</em></div>
+            <div class="layer-plants">
+              <span class="layer-plant-pill" style="border-color:var(--stone); background:rgba(107,100,88,0.12); color:var(--cream);">Stone wall → Driveway</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal -->
+    <div class="subsection-heading">Seasonal Rhythm — Year-Round Interest</div>
+    <div class="seasonal-section">
+      <div class="seasonal-chart">
+        <div class="seasonal-header">
+          <div class="seasonal-col-header" style="text-align:left; padding-left:0.75rem;">Plant</div>
+          <div class="seasonal-col-header">Winter</div>
+          <div class="seasonal-col-header">Spring</div>
+          <div class="seasonal-col-header">Summer</div>
+          <div class="seasonal-col-header">Fall</div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Japanese Maple</div>
+          <div class="seasonal-cell"><div class="season-block interest-structure"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-color"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Hellebores</div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Daphne</div>
+          <div class="seasonal-cell"><div class="season-block interest-fragrance"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Oakleaf Hydrangea</div>
+          <div class="seasonal-cell"><div class="season-block interest-structure"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-color"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Hakonechloa</div>
+          <div class="seasonal-cell"><div class="season-block interest-structure"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-color"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Catmint</div>
+          <div class="seasonal-cell"><div class="season-block interest-none"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-bloom"></div></div>
+        </div>
+        <div class="seasonal-row">
+          <div class="seasonal-plant-name">Aucuba</div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+          <div class="seasonal-cell"><div class="season-block interest-foliage"></div></div>
+        </div>
+        <div class="seasonal-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--blush);"></div>Bloom</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--lavender);"></div>Fragrant bloom</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green-leaf);"></div>Foliage</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--rust);"></div>Fall color</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--stone);"></div>Structure/silhouette</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cost -->
+    <div class="cost-card">
+      <div>
+        <div class="cost-label">Estimated Cost</div>
+        <div class="cost-amount">$350–450</div>
+      </div>
+      <div class="cost-note">
+        Plants only · Permanent planting · Woodland-edge layering against stone chimney ·
+        Catmint at front edge creates visual thread to driveway beds C &amp; D.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     UNIFYING PALETTE
+════════════════════════════════════════════════════ -->
+<section id="palette" class="section" style="scroll-margin-top:60px;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Design Coherence</div>
+      <h2 class="section-title">Unifying Plant Palette</h2>
+      <p class="section-subtitle">These plants repeat across multiple areas to create visual rhythm and continuity — the Pearson approach to cohesion across distinct garden rooms.</p>
+    </div>
+
+    <div class="palette-grid">
+
+      <!-- Nepeta -->
+      <div class="palette-card">
+        <div class="palette-card-header">
+          <div class="palette-plant-name">Catmint 'Walker's Low'</div>
+          <div class="palette-botanical">Nepeta racemosa 'Walker's Low'</div>
+        </div>
+        <div class="palette-areas">
+          <div class="palette-area-chip" title="Area C — Island Bed">C</div>
+          <div class="palette-area-chip" title="Area D — Football Bed">D</div>
+          <div class="palette-area-chip" title="Area E — Crape Myrtle Bed">E</div>
+          <div class="palette-area-chip" title="Area F — Chimney Bed">F</div>
+        </div>
+        <div class="palette-role">The primary unifying thread — blue-purple billow flows along both stone walls (C, D) and under crape myrtles (E) and at chimney front (F). The through-line of the whole arrival sequence.</div>
+      </div>
+
+      <!-- Helleborus -->
+      <div class="palette-card">
+        <div class="palette-card-header">
+          <div class="palette-plant-name">Lenten Rose</div>
+          <div class="palette-botanical">Helleborus orientalis</div>
+        </div>
+        <div class="palette-areas">
+          <div class="palette-area-chip" title="Area B — Gate Right">B</div>
+          <div class="palette-area-chip" title="Area E — Crape Myrtle Bed">E</div>
+          <div class="palette-area-chip" title="Area F — Chimney Bed">F</div>
+        </div>
+        <div class="palette-role">Winter-to-spring bloom links the gate garden (B) to the transition bed (E) to the chimney bed (F) — you feel the winter garden presence throughout the arrival sequence.</div>
+      </div>
+
+      <!-- Daphne -->
+      <div class="palette-card">
+        <div class="palette-card-header">
+          <div class="palette-plant-name">Winter Daphne</div>
+          <div class="palette-botanical">Daphne odora 'Aureomarginata'</div>
+        </div>
+        <div class="palette-areas">
+          <div class="palette-area-chip" title="Area A — Gate Left">A</div>
+          <div class="palette-area-chip" title="Area F — Chimney Bed">F</div>
+        </div>
+        <div class="palette-role">Scent at gate threshold (A) echoes in the chimney bed (F) — fragrance anchors both entry points, front and back.</div>
+      </div>
+
+      <!-- Russian Sage -->
+      <div class="palette-card">
+        <div class="palette-card-header">
+          <div class="palette-plant-name">Russian Sage</div>
+          <div class="palette-botanical">Salvia yangii</div>
+        </div>
+        <div class="palette-areas">
+          <div class="palette-area-chip" title="Area C — Island Bed">C</div>
+          <div class="palette-area-chip" title="Area D — Football Bed">D</div>
+        </div>
+        <div class="palette-role">Lavender haze unifies the two driveway beds — you see one continuous blue-silver palette across both sides of the drive.</div>
+      </div>
+
+      <!-- Rozanne Geranium -->
+      <div class="palette-card">
+        <div class="palette-card-header">
+          <div class="palette-plant-name">Cranesbill 'Rozanne'</div>
+          <div class="palette-botanical">Geranium 'Rozanne'</div>
+        </div>
+        <div class="palette-areas">
+          <div class="palette-area-chip" title="Area C — Island Bed">C</div>
+          <div class="palette-area-chip" title="Area D — Football Bed">D</div>
+        </div>
+        <div class="palette-role">Edge spiller on both driveway beds — creates the impression of a continuous border flowing from one bed to the other.</div>
+      </div>
+
+      <!-- Echinacea -->
+      <div class="palette-card">
+        <div class="palette-card-header">
+          <div class="palette-plant-name">Purple Coneflower 'Magnus'</div>
+          <div class="palette-botanical">Echinacea purpurea 'Magnus'</div>
+        </div>
+        <div class="palette-areas">
+          <div class="palette-area-chip" title="Area C — Island Bed">C</div>
+          <div class="palette-area-chip" title="Area D — Football Bed">D</div>
+        </div>
+        <div class="palette-role">Summer pink-purple in both driveway beds — seed heads persist into winter, providing long-season interest.</div>
+      </div>
+
+      <!-- Hakonechloa -->
+      <div class="palette-card">
+        <div class="palette-card-header">
+          <div class="palette-plant-name">Japanese Forest Grass</div>
+          <div class="palette-botanical">Hakonechloa macra</div>
+        </div>
+        <div class="palette-areas">
+          <div class="palette-area-chip" title="Area F — Chimney Bed">F</div>
+          <div class="palette-area-chip" title="Future shade areas" style="background:rgba(50,50,40,0.5); color:var(--muted); border-color:var(--border);">+</div>
+        </div>
+        <div class="palette-role">Currently in Area F; earmarked for future shade areas as design expands — the movement and golden colour will carry across all shaded zones.</div>
+      </div>
+
+      <!-- Sarcococca / Camellia / Hellebore trio -->
+      <div class="palette-card">
+        <div class="palette-card-header">
+          <div class="palette-plant-name">Winter Vignette Trio</div>
+          <div class="palette-botanical">Camellia · Sarcococca · Helleborus</div>
+        </div>
+        <div class="palette-areas">
+          <div class="palette-area-chip" title="Area B — Gate Right">B</div>
+        </div>
+        <div class="palette-role">The gate-right vignette — three plants at peak simultaneously in Jan–Feb. Sets the tone for the whole garden's winter character.</div>
+      </div>
+
+    </div>
+
+    <!-- Visual matrix -->
+    <div style="margin-top: 3rem;">
+      <div class="subsection-heading">Presence Matrix — Where Each Plant Appears</div>
+      <div class="plant-table-wrap">
+        <table class="plant-table">
+          <thead>
+            <tr>
+              <th>Plant</th>
+              <th style="text-align:center;">A</th>
+              <th style="text-align:center;">B</th>
+              <th style="text-align:center;">C</th>
+              <th style="text-align:center;">D</th>
+              <th style="text-align:center;">E</th>
+              <th style="text-align:center;">F</th>
+              <th>Role in Palette</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Catmint 'Walker's Low'</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td>Primary through-line · Blue-purple billow</td>
+            </tr>
+            <tr>
+              <td>Helleborus orientalis</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td>Winter bloom · Shade connector</td>
+            </tr>
+            <tr>
+              <td>Daphne odora</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td>Fragrance anchor · Entry threshold</td>
+            </tr>
+            <tr>
+              <td>Russian Sage</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td>Lavender haze · Driveway unity</td>
+            </tr>
+            <tr>
+              <td>Geranium 'Rozanne'</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td>Edge spiller · Stone softening</td>
+            </tr>
+            <tr>
+              <td>Echinacea 'Magnus'</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td>Summer colour · Pollinator</td>
+            </tr>
+            <tr>
+              <td>Pink Muhly Grass</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;"><span style="color:var(--blush);">●</span></td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td>Fall spectacle · NC native star</td>
+            </tr>
+            <tr>
+              <td>Hakonechloa macra</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;">—</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);">●</span></td>
+              <td>Shade movement · Golden cascade</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-note">
+        Devon House · 3301 Devon Rd, Durham NC · Master Planting Plan<br/>
+        Design philosophy: Dan Pearson / Old Rectory / Armscote Manor · USDA Zone 7b<br/>
+        Hardscape basis: Liggett Design Group · Planting diverges — Pearson approach
+      </div>
+      <div class="footer-date">
+        Updated February 25, 2026<br/>
+        Areas A–F designed
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Highlight active nav item on scroll
+  const sections = document.querySelectorAll('[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (item.getAttribute('href') === '#' + id) {
+            item.classList.add('active');
+          }
+        });
+      }
+    });
+  }, {
+    rootMargin: '-20% 0px -70% 0px'
+  });
+
+  sections.forEach(section => observer.observe(section));
+
+  // Smooth image reveal
+  document.querySelectorAll('.plant-img-wrap img').forEach(img => {
+    if (img.complete) {
+      img.style.opacity = '1';
+    } else {
+      img.style.opacity = '0';
+      img.style.transition = 'opacity 0.4s ease';
+      img.onload = () => { img.style.opacity = '1'; };
+    }
+  });
+</script>
+
+</body>
+</html>
